@@ -43,6 +43,10 @@ CREATE TABLE Dim_Date (
     CONSTRAINT uq_dim_date UNIQUE (year, month, day)
 );
 
+CREATE TABLE Dim_Cliche (
+    id           BIGINT GENERTED ALWAYS AS IDENTITY PRIMARY KEY,
+    expression   VARCHAR(500)
+);
 
 CREATE TABLE Fact_Declaration (
     id                          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -67,6 +71,15 @@ CREATE TABLE Fact_Declaration (
     CONSTRAINT fk_fact_competition FOREIGN KEY (competition_id) REFERENCES Dim_Competition(id),
     CONSTRAINT fk_fact_media       FOREIGN KEY (media_id)       REFERENCES Dim_Media(id),
     CONSTRAINT fk_fact_date        FOREIGN KEY (date_id)        REFERENCES Dim_Date(id)
+);
+
+CREATE TABLE Association_Declaration_Cliche (
+    declaration_id   BIGINT,
+    cliche_id        BIGINT,
+    occurences       INT,
+
+    CONSTRAINT fk_declaration_cliche    FOREIGN KEY (declaration_id)         REFERENCES Fact_Declaration(id),
+    CONSTRAINT fk_cliche_declaration    FOREIGN KEY (cliche_id)              REFERENCES Dim_Cliche(id)
 );
 
 CREATE INDEX idx_fact_person      ON Fact_Declaration(person_id);
